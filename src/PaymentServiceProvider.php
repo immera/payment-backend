@@ -4,7 +4,7 @@ namespace Adiechahk\PaymentBackend;
 
 use Illuminate\Support\ServiceProvider;
 
-class PaymentBackendServiceProvider extends ServiceProvider
+class PaymentServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
@@ -15,8 +15,8 @@ class PaymentBackendServiceProvider extends ServiceProvider
     {
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'adiechahk');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'adiechahk');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        // $this->loadRoutesFrom(__DIR__.'/routes.php');
+        $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadRoutesFrom(__DIR__.'/routes.php');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
@@ -31,11 +31,11 @@ class PaymentBackendServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/payment-backend.php', 'payment-backend');
+        $this->mergeConfigFrom(__DIR__.'/../config/payment.php', 'payment');
 
         // Register the service the package provides.
-        $this->app->singleton('payment-backend', function ($app) {
-            return new PaymentBackend;
+        $this->app->singleton('payment', function ($app) {
+            return new Payment;
         });
     }
 
@@ -46,7 +46,7 @@ class PaymentBackendServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['payment-backend'];
+        return ['payment'];
     }
 
     /**
@@ -58,8 +58,8 @@ class PaymentBackendServiceProvider extends ServiceProvider
     {
         // Publishing the configuration file.
         $this->publishes([
-            __DIR__.'/../config/payment-backend.php' => config_path('payment-backend.php'),
-        ], 'payment-backend.config');
+            __DIR__.'/../config/payment.php' => config_path('payment.php'),
+        ], 'payment.config');
 
         // Publishing the views.
         /*$this->publishes([
