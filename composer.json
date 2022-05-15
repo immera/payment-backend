@@ -1,0 +1,41 @@
+{
+    "name": "adiechahk/payment-backend",
+    "description": ":package_description",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Author Name",
+            "email": "author@email.com",
+            "homepage": "http://author.com"
+        }
+    ],
+    "homepage": "https://github.com/adiechahk/payment-backend",
+    "keywords": ["Laravel", "PaymentBackend"],
+    "require": {
+        "illuminate/support": "~9"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~9.0",
+        "orchestra/testbench": "~7"
+    },
+    "autoload": {
+        "psr-4": {
+            "Adiechahk\\PaymentBackend\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Adiechahk\\PaymentBackend\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Adiechahk\\PaymentBackend\\PaymentBackendServiceProvider"
+            ],
+            "aliases": {
+                "PaymentBackend": "Adiechahk\\PaymentBackend\\Facades\\PaymentBackend"
+            }
+        }
+    }
+}
