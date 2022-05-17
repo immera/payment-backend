@@ -15,6 +15,20 @@ $ composer require adiechahk/payment-backend
 
 ## Usage
 
+This package is need to be used with frontend package. [package-frontend](https://github.com/AdiechaHK/pkg-payment-frontend)
+
+You need to except routes for cors
+just add the following route in the `cors.php` config
+`payment/*` to `paths`
+
+```php
+...
+
+'paths' => [..., 'payment/*'],
+
+...
+```
+
 ## Change log
 
 Please see the [changelog](changelog.md) for more information on what has changed recently.
