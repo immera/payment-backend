@@ -2,6 +2,8 @@
 
 namespace Adiechahk\PaymentBackend;
 
+use Adiechahk\PaymentBackend\Models\PaymentInstance;
+use Adiechahk\PaymentBackend\Observers\PaymentInstanceObserver;
 use Illuminate\Support\ServiceProvider;
 
 class PaymentServiceProvider extends ServiceProvider
@@ -17,6 +19,9 @@ class PaymentServiceProvider extends ServiceProvider
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'adiechahk');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
+
+        // Observer
+        PaymentInstance::observe(PaymentInstanceObserver::class);
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
