@@ -12,7 +12,18 @@ class Payment
       $this->stripe = $stripe_key != null ? new \Stripe\StripeClient($stripe_key): null;
     }
   
-    public function pay($method, $currency, $amount) {
+    public function pay($method, $currency, $amount, $options = []) {
+      if ($method == "multibanco") {
+        return $this->stripe->sources->create([
+          "type" => "multibanco",
+          "currency" => $currency,
+          "amount" => $amount,
+          "owner" => [
+            "email" => $options['email'],
+            "name" => $options['name']
+          ]
+        ]);
+      }
       return $this->stripe->paymentIntents->create([
         'amount' => $amount,
         'currency' => $currency,

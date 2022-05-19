@@ -29,7 +29,11 @@ class PaymentController extends Controller
         $response = $payment->pay(
             $request->payment_method,
             $request->currency,
-            $request->amount
+            $request->amount,
+            [
+                "email" => $request->email,
+                "name" => $request->name
+            ]
         );
 
         $pay_instance->refresh();
