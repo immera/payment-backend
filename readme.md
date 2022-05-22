@@ -53,7 +53,7 @@ If you discover any security related issues, please email adiechahari@email.com 
 
 ## License
 
-MIT. Please see the [license file](license.md) for more information.
+MIT. Please see the [license file](license.md) for more information...
 
 [ico-version]: https://img.shields.io/packagist/v/adiechahk/payment-backend.svg?style=flat-square
 [ico-downloads]: https://img.shields.io/packagist/dt/adiechahk/payment-backend.svg?style=flat-square
