@@ -2,6 +2,8 @@
 
 namespace Adiechahk\PaymentBackend\Controllers;
 
+use Adiechahk\PaymentBackend\Events\PaymentInstanceCreated;
+use Adiechahk\PaymentBackend\Events\PaymentInstanceUpdated;
 use Adiechahk\PaymentBackend\Payment;
 use Adiechahk\PaymentBackend\Models\PaymentInstance;
 use Illuminate\Http\Request;
@@ -44,6 +46,8 @@ class PaymentController extends Controller
         $pay_instance->response_object = $response;
         $pay_instance->save();
 
+        event(new PaymentInstanceCreated($pay_instance, $request->additional));
+
         return [
             "callback" => route('payment.callback'),
             "response" => $response
@@ -59,6 +63,7 @@ class PaymentController extends Controller
             $pay_instance->save();
             return redirect($pay_instance->return_url);
         }
+        event(new PaymentInstanceUpdated($pay_instance))
         return "Payment Instance not found !";
     }
 

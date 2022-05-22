@@ -2,6 +2,7 @@
 
 namespace Adiechahk\PaymentBackend\Observers;
 
+use Adiechahk\PaymentBackend\Events\PaymentInstanceCreated;
 use Adiechahk\PaymentBackend\Models\PaymentInstance;
 
 class PaymentInstanceObserver
@@ -9,7 +10,7 @@ class PaymentInstanceObserver
     /**
      * Handle the PaymentInstance "created" event.
      *
-     * @param  \App\Models\PaymentInstance  $paymentInstance
+     * @param  \Adiechahk\PaymentBackend\Models\PaymentInstance  $paymentInstance
      * @return void
      */
     public function created(PaymentInstance $paymentInstance)
@@ -20,7 +21,7 @@ class PaymentInstanceObserver
     /**
      * Handle the PaymentInstance "updated" event.
      *
-     * @param  \App\Models\PaymentInstance  $paymentInstance
+     * @param  \Adiechahk\PaymentBackend\Models\PaymentInstance  $paymentInstance
      * @return void
      */
     public function updated(PaymentInstance $paymentInstance)
@@ -31,7 +32,7 @@ class PaymentInstanceObserver
     /**
      * Handle the PaymentInstance "deleted" event.
      *
-     * @param  \App\Models\PaymentInstance  $paymentInstance
+     * @param  \Adiechahk\PaymentBackend\Models\PaymentInstance  $paymentInstance
      * @return void
      */
     public function deleted(PaymentInstance $paymentInstance)
@@ -42,7 +43,7 @@ class PaymentInstanceObserver
     /**
      * Handle the PaymentInstance "restored" event.
      *
-     * @param  \App\Models\PaymentInstance  $paymentInstance
+     * @param  \Adiechahk\PaymentBackend\Models\PaymentInstance  $paymentInstance
      * @return void
      */
     public function restored(PaymentInstance $paymentInstance)
@@ -53,7 +54,7 @@ class PaymentInstanceObserver
     /**
      * Handle the PaymentInstance "force deleted" event.
      *
-     * @param  \App\Models\PaymentInstance  $paymentInstance
+     * @param  \Adiechahk\PaymentBackend\Models\PaymentInstance  $paymentInstance
      * @return void
      */
     public function forceDeleted(PaymentInstance $paymentInstance)
