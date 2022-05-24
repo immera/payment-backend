@@ -10,8 +10,14 @@ This is where your description should go. Take a look at [contributing.md](contr
 Via Composer
 
 ``` bash
-$ composer require adiechahk/payment-backend
+composer require adiechahk/payment-backend
 ```
+
+Publish the vendor
+```bash
+php artisan vendor:publish --provider=Adiechahk\PaymentBackend\PaymentServiceProvider
+```
+
 
 ## Usage
 
@@ -28,6 +34,13 @@ just add the following route in the `cors.php` config
 
 ...
 ```
+
+also make sure you have set your secret key in `.env` file
+
+```
+STRIPE_SECRET=
+```
+
 
 ## Change log
 
