@@ -13,6 +13,13 @@ class Payment
     }
   
     public function pay($method, $currency, $amount, $options = []) {
+      if ($method == "cash") {
+        return (object) [
+          "id" => "cash",
+          "client_secret" => "not_present",
+          "status" => "pending"
+        ];
+      }
       if ($method == "multibanco") {
         return $this->stripe->sources->create([
           "type" => "multibanco",
