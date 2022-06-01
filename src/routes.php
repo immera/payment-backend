@@ -6,6 +6,14 @@ use Illuminate\Support\Facades\Route;
 Route::withoutMiddleware([
     \App\Http\Middleware\VerifyCsrfToken::class
 ])->group(function() {
+    Route::get(
+        '/payment/instances',
+        [PaymentController::class, 'index']
+    )->name('payment.get');
+    Route::patch(
+        '/payment/instances/{paymentInstance}/ack',
+        [PaymentController::class, 'ack']
+    )->name('payment.ack');
     Route::post(
         '/payment/request',
         [PaymentController::class, 'initPayment']

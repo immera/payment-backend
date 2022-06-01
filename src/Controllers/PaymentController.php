@@ -16,6 +16,23 @@ class PaymentController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    public function index(Request $request)
+    {
+        return PaymentInstance::where($request->all())->get();
+    }
+
+    public function ack(Request $request, PaymentInstance $paymentInstance)
+    {
+        try {
+            $paymentInstance->status = "successful";
+            $paymentInstance->save();
+            return ["success" => true];
+        }
+        catch (\Exception $e) {
+            return ["success" => false];
+        }
+    }
+
 
     //
     public function initPayment(Request $request)
