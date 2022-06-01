@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('status')->nullable();
             $table->string('amount')->nullable();
             $table->string('currency')->nullable();
+            $table->text('additional_info')->nullable();
             $table->text('request_options')->nullable();
             $table->text('response_object')->nullable();
         $table->timestamps();

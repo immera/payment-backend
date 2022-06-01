@@ -16,18 +16,16 @@ class PaymentInstanceCreated
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     private $payment_instance;
-    private $additional_params;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(PaymentInstance $pi, array $data)
+    public function __construct(PaymentInstance $pi)
     {
         //
         $this->payment_instance = $pi;
-        $this->additional_params = $data;
     }
 
     /**
