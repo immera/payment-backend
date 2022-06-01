@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 if (app() instanceof \Illuminate\Foundation\Application) {
     Route::withoutMiddleware([
         \App\Http\Middleware\VerifyCsrfToken::class
-    ])->group(function() {
+    ])->group(['prefix'=> config('payment.route_prefix', "")], function() {
         Route::get(
             '/payment/instances',
             [PaymentController::class, 'index']
@@ -29,34 +29,37 @@ if (app() instanceof \Illuminate\Foundation\Application) {
         )->name('payment.webhook');
     });
 } else {
-    $this->app->router->get(
-        '/payment/instances',
-        ["as" => 'payment.get', 'PaymentController@index']
-    );
-    $this->app->router->patch(
-        '/payment/instances/{paymentInstance}/ack',
-        ["as" => 'payment.ack', 'PaymentController@ack']
-    );
-    $this->app->router->post(
-        '/payment/request',
-        ["as" => 'payment.init', 'PaymentController@initPayment']
-    );
-    $this->app->router->get(
-        '/payment/callback',
-        ["as" => 'payment.callback', 'PaymentController@callback']
-    );
-    $this->app->router->post(
-        '/payment/callback',
-        ["as" => 'payment.callback', 'PaymentController@callback']
-    );
-    $this->app->router->get(
-        '/payment/webhook',
-        ["as" => 'payment.webhook', 'PaymentController@webhook']
-    );    
-    $this->app->router->post(
-        '/payment/webhook',
-        ["as" => 'payment.webhook', 'PaymentController@webhook']
-    );    
+    $r = $this->app->router;
+    $r->group(['prefix' => config("payment.route_prefix", "")], function () use ($r) {
+        $r->get(
+            '/payment/instances',
+            ["as" => 'payment.get', 'PaymentController@index']
+        );
+        $r->patch(
+            '/payment/instances/{paymentInstance}/ack',
+            ["as" => 'payment.ack', 'PaymentController@ack']
+        );
+        $r->post(
+            '/payment/request',
+            ["as" => 'payment.init', 'PaymentController@initPayment']
+        );
+        $r->get(
+            '/payment/callback',
+            ["as" => 'payment.callback', 'PaymentController@callback']
+        );
+        $r->post(
+            '/payment/callback',
+            ["as" => 'payment.callback', 'PaymentController@callback']
+        );
+        $r->get(
+            '/payment/webhook',
+            ["as" => 'payment.webhook', 'PaymentController@webhook']
+        );
+        $r->post(
+            '/payment/webhook',
+            ["as" => 'payment.webhook', 'PaymentController@webhook']
+        );
+    });
 }
 
 
