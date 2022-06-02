@@ -32,32 +32,46 @@ if (app() instanceof \Illuminate\Foundation\Application) {
     $r = $this->app->router;
     $r->group(['prefix' => config("payment.route_prefix", "")], function () use ($r) {
         $r->get(
-            '/payment/instances',
-            ["as" => 'payment.get', 'PaymentController@index']
+            '/payment/instances', [
+                "as" => 'payment.get',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@index'
+            ]
         );
         $r->patch(
-            '/payment/instances/{paymentInstance}/ack',
-            ["as" => 'payment.ack', 'PaymentController@ack']
+            '/payment/instances/{paymentInstance}/ack', [
+                "as" => 'payment.ack',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@ack'
+            ]
         );
         $r->post(
-            '/payment/request',
-            ["as" => 'payment.init', 'PaymentController@initPayment']
+            '/payment/request', [
+                "as" => 'payment.init',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@initPayment'
+            ]
         );
         $r->get(
-            '/payment/callback',
-            ["as" => 'payment.callback', 'PaymentController@callback']
+            '/payment/callback', [
+                "as" => 'payment.callback',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@callback'
+            ]
         );
         $r->post(
-            '/payment/callback',
-            ["as" => 'payment.callback', 'PaymentController@callback']
+            '/payment/callback', [
+                "as" => 'payment.callback',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@callback'
+            ]
         );
         $r->get(
-            '/payment/webhook',
-            ["as" => 'payment.webhook', 'PaymentController@webhook']
+            '/payment/webhook', [
+                "as" => 'payment.webhook',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@webhook'
+            ]
         );
         $r->post(
-            '/payment/webhook',
-            ["as" => 'payment.webhook', 'PaymentController@webhook']
+            '/payment/webhook', [
+                "as" => 'payment.webhook',
+                "uses" => 'Adiechahk\PaymentBackend\Controllers\PaymentController@webhook'
+            ]
         );
     });
 }

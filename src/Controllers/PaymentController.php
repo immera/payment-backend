@@ -7,14 +7,10 @@ use Adiechahk\PaymentBackend\Events\PaymentInstanceUpdated;
 use Adiechahk\PaymentBackend\Payment;
 use Adiechahk\PaymentBackend\Models\PaymentInstance;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Illuminate\Foundation\Bus\DispatchesJobs;
-use Illuminate\Foundation\Validation\ValidatesRequests;
+use App\Http\Controllers\Controller;
 
 class PaymentController extends Controller
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function index(Request $request)
     {
@@ -81,7 +77,7 @@ class PaymentController extends Controller
             $pay_instance->save();
             return redirect($pay_instance->return_url);
         }
-        event(new PaymentInstanceUpdated($pay_instance))
+        event(new PaymentInstanceUpdated($pay_instance));
         return "Payment Instance not found !";
     }
 
