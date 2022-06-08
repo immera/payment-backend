@@ -10,7 +10,7 @@
         }
     ],
     "homepage": "https://github.com/immera/payment-backend",
-    "keywords": ["Laravel", "PaymentBackend"],
+    "keywords": ["Laravel", "Payment"],
     "require": {
         "illuminate/support": "~9|~8",
         "stripe/stripe-php": "^8.1"
@@ -21,21 +21,21 @@
     },
     "autoload": {
         "psr-4": {
-            "Adiechahk\\PaymentBackend\\": "src/"
+            "Immera\\Payment\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Adiechahk\\PaymentBackend\\Tests\\": "tests"
+            "Immera\\Payment\\Tests\\": "tests"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Adiechahk\\PaymentBackend\\PaymentServiceProvider"
+                "Immera\\Payment\\PaymentServiceProvider"
             ],
             "aliases": {
-                "Payment": "Adiechahk\\PaymentBackend\\Facades\\Payment"
+                "Payment": "Immera\\Payment\\Facades\\Payment"
             }
         }
     }

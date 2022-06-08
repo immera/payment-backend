@@ -10,18 +10,18 @@ This is where your description should go. Take a look at [contributing.md](contr
 Via Composer
 
 ``` bash
-composer require adiechahk/payment-backend
+composer require immera/payment-backend
 ```
 
 Publish the vendor
 ```bash
-php artisan vendor:publish --provider=Adiechahk\PaymentBackend\PaymentServiceProvider
+php artisan vendor:publish --provider=Immera\PaymentBackend\PaymentServiceProvider
 ```
 
 
 ## Usage
 
-This package is need to be used with frontend package. [package-frontend](https://github.com/AdiechaHK/pkg-payment-frontend)
+This package is need to be used with frontend package. [package-frontend](https://github.com/Immera/pkg-payment-frontend)
 
 You need to except routes for cors
 just add the following route in the `cors.php` config
@@ -62,19 +62,19 @@ If you discover any security related issues, please email adiechahari@email.com 
 
 ## Credits
 
-- [AdiechaHK][link-author]
+- [Immera][link-author]
 
 ## License
 
 MIT. Please see the [license file](license.md) for more information...
 
-[ico-version]: https://img.shields.io/packagist/v/adiechahk/payment-backend.svg?style=flat-square
-[ico-downloads]: https://img.shields.io/packagist/dt/adiechahk/payment-backend.svg?style=flat-square
-[ico-travis]: https://img.shields.io/travis/adiechahk/payment-backend/master.svg?style=flat-square
+[ico-version]: https://img.shields.io/packagist/v/immera/payment-backend.svg?style=flat-square
+[ico-downloads]: https://img.shields.io/packagist/dt/immera/payment-backend.svg?style=flat-square
+[ico-travis]: https://img.shields.io/travis/immera/payment-backend/master.svg?style=flat-square
 [ico-styleci]: https://styleci.io/repos/12345678/shield
 
-[link-packagist]: https://packagist.org/packages/adiechahk/payment-backend
-[link-downloads]: https://packagist.org/packages/adiechahk/payment-backend
-[link-travis]: https://travis-ci.org/adiechahk/payment-backend
+[link-packagist]: https://packagist.org/packages/immera/payment-backend
+[link-downloads]: https://packagist.org/packages/immera/payment-backend
+[link-travis]: https://travis-ci.org/immera/payment-backend
 [link-styleci]: https://styleci.io/repos/12345678
-[link-author]: https://github.com/adiechahk
+[link-author]: https://github.com/immera
