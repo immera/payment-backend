@@ -1,10 +1,9 @@
 <?php
 
-namespace Adiechahk\PaymentBackend\Models;
+namespace Immera\Payment\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 class PaymentInstance extends Model
 {
-
 }

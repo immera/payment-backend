@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreatePaymentsInstancesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->text('additional_info')->nullable();
             $table->text('request_options')->nullable();
             $table->text('response_object')->nullable();
-        $table->timestamps();
+            $table->timestamps();
         });
     }
 
@@ -38,4 +38,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('payment_instances');
     }
-};
+}

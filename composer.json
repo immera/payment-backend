@@ -1,6 +1,6 @@
 {
-    "name": "adiechahk/payment-backend",
-    "description": ":package_description",
+    "name": "immera/payment-backend",
+    "description": "Immera payments helper for backend",
     "license": "MIT",
     "authors": [
         {
@@ -9,7 +9,7 @@
             "homepage": "http://harikrushna.info"
         }
     ],
-    "homepage": "https://github.com/adiechahk/payment-backend",
+    "homepage": "https://github.com/immera/payment-backend",
     "keywords": ["Laravel", "PaymentBackend"],
     "require": {
         "illuminate/support": "~9|~8",

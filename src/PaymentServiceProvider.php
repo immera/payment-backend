@@ -1,22 +1,20 @@
 <?php
 
-namespace Adiechahk\PaymentBackend;
+namespace Immera\Payment;
 
-use Adiechahk\PaymentBackend\Models\PaymentInstance;
-use Adiechahk\PaymentBackend\Observers\PaymentInstanceObserver;
 use Illuminate\Support\ServiceProvider;
+use Immera\Payment\Models\PaymentInstance;
+use Immera\Payment\Observers\PaymentInstanceObserver;
 
 class PaymentServiceProvider extends ServiceProvider
 {
     /**
      * Perform post-registration booting of services.
-     *
-     * @return void
      */
     public function boot(): void
     {
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'adiechahk');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'adiechahk');
+        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'Immera');
+        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'Immera');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -31,8 +29,6 @@ class PaymentServiceProvider extends ServiceProvider
 
     /**
      * Register any package services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -40,7 +36,7 @@ class PaymentServiceProvider extends ServiceProvider
 
         // Register the service the package provides.
         $this->app->singleton('payment', function ($app) {
-            return new Payment;
+            return new Payment();
         });
     }
 
@@ -56,8 +52,6 @@ class PaymentServiceProvider extends ServiceProvider
 
     /**
      * Console-specific booting.
-     *
-     * @return void
      */
     protected function bootForConsole(): void
     {
@@ -68,17 +62,17 @@ class PaymentServiceProvider extends ServiceProvider
 
         // Publishing the views.
         /*$this->publishes([
-            __DIR__.'/../resources/views' => base_path('resources/views/vendor/adiechahk'),
+            __DIR__.'/../resources/views' => base_path('resources/views/vendor/Immera'),
         ], 'payment-backend.views');*/
 
         // Publishing assets.
         /*$this->publishes([
-            __DIR__.'/../resources/assets' => public_path('vendor/adiechahk'),
+            __DIR__.'/../resources/assets' => public_path('vendor/Immera'),
         ], 'payment-backend.views');*/
 
         // Publishing the translation files.
         /*$this->publishes([
-            __DIR__.'/../resources/lang' => resource_path('lang/vendor/adiechahk'),
+            __DIR__.'/../resources/lang' => resource_path('lang/vendor/Immera'),
         ], 'payment-backend.views');*/
 
         // Registering package commands.

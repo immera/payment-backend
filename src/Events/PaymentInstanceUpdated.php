@@ -1,19 +1,18 @@
 <?php
 
-namespace Adiechahk\PaymentBackend\Events;
+namespace Immera\Payment\Events;
 
-use Adiechahk\PaymentBackend\Models\PaymentInstance;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Immera\Payment\Models\PaymentInstance;
 
 class PaymentInstanceUpdated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+    use InteractsWithSockets;
+    use SerializesModels;
 
     private $payment_instance;
 
@@ -24,7 +23,6 @@ class PaymentInstanceUpdated
      */
     public function __construct(PaymentInstance $pi)
     {
-        //
         $this->payment_instance = $pi;
     }
 

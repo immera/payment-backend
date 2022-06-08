@@ -1,17 +1,17 @@
 <?php
 
-namespace Adiechahk\PaymentBackend\Controllers;
+namespace Immera\Payment\Controllers;
 
-use Adiechahk\PaymentBackend\Events\PaymentInstanceCreated;
-use Adiechahk\PaymentBackend\Events\PaymentInstanceUpdated;
-use Adiechahk\PaymentBackend\Payment;
-use Adiechahk\PaymentBackend\Models\PaymentInstance;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Exception;
+use Illuminate\Http\Request;
+use Immera\Payment\Events\PaymentInstanceCreated;
+use Immera\Payment\Events\PaymentInstanceUpdated;
+use Immera\Payment\Models\PaymentInstance;
+use Immera\Payment\Payment;
 
 class PaymentController extends Controller
 {
-
     public function index(Request $request)
     {
         return PaymentInstance::where($request->all())->get();
@@ -20,20 +20,18 @@ class PaymentController extends Controller
     public function ack(Request $request, PaymentInstance $paymentInstance)
     {
         try {
-            $paymentInstance->status = "successful";
+            $paymentInstance->status = 'successful';
             $paymentInstance->save();
-            return ["success" => true];
-        }
-        catch (\Exception $e) {
-            return ["success" => false];
+
+            return ['success' => true];
+        } catch (Exception $e) {
+            return ['success' => false];
         }
     }
 
-
-    //
     public function initPayment(Request $request)
     {
-        $pay_instance = new PaymentInstance;
+        $pay_instance = new PaymentInstance();
         $pay_instance->payment_method = $request->payment_method;
         $pay_instance->return_url = $request->return_url;
         $pay_instance->amount = $request->amount;
@@ -41,14 +39,14 @@ class PaymentController extends Controller
         $pay_instance->additional_info = $request->additional_info;
         $pay_instance->save();
 
-        $payment = new Payment;
+        $payment = new Payment();
         $response = $payment->pay(
             $request->payment_method,
             $request->currency,
             $request->amount,
             [
-                "email" => $request->email,
-                "name" => $request->name
+                'email' => $request->email,
+                'name' => $request->name,
             ]
         );
 
@@ -63,10 +61,9 @@ class PaymentController extends Controller
         event(new PaymentInstanceCreated($pay_instance));
 
         return [
-            "callback" => route('payment.callback'),
-            "response" => $response
+            'callback' => route('payment.callback'),
+            'response' => $response,
         ];
-
     }
 
     public function callback(Request $request)
@@ -75,14 +72,16 @@ class PaymentController extends Controller
         if ($pay_instance) {
             $pay_instance->status = $request->redirect_status;
             $pay_instance->save();
+
             return redirect($pay_instance->return_url);
         }
         event(new PaymentInstanceUpdated($pay_instance));
-        return "Payment Instance not found !";
+
+        return 'Payment Instance not found !';
     }
 
     public function webhook(Request $request)
     {
-        return "Yet to implement !";
+        return 'Yet to implement !';
     }
 }
