@@ -4,6 +4,11 @@
     "license": "MIT",
     "authors": [
         {
+            "name": "Immera",
+            "email": "hello@immera.io",
+            "homepage": "https://immera.io"
+        },
+        {
             "name": "Adiecha Harikrushna",
             "email": "adiechahari@email.com",
             "homepage": "http://harikrushna.info"
