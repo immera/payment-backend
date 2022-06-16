@@ -40,14 +40,14 @@ class PaymentController extends Controller
         $pay_instance->save();
 
         $payment = new Payment();
+
+        $options = $request->except(['currency', 'amount', 'payment_method']);
+
         $response = $payment->pay(
             $request->payment_method,
             $request->currency,
             $request->amount,
-            [
-                'email' => $request->email,
-                'name' => $request->name,
-            ]
+            $options
         );
 
         $pay_instance->refresh();
@@ -78,6 +78,10 @@ class PaymentController extends Controller
         event(new PaymentInstanceUpdated($pay_instance));
 
         return 'Payment Instance not found !';
+    }
+
+    public function getCards(Request $request) {
+        return Payment::getCards();
     }
 
     public function webhook(Request $request)

@@ -2,20 +2,29 @@
 
 use Illuminate\Support\Facades\Route;
 use Immera\Payment\Controllers\PaymentController;
+use Immera\Payment\Controllers\CardController;
+use App\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Support\Facades\Auth;
+
+Route::get('hello', function() {
+    return request()->except(['amount']);
+});
 
 if (app() instanceof \Illuminate\Foundation\Application) {
     Route::withoutMiddleware([
-        \App\Http\Middleware\VerifyCsrfToken::class,
-    ])->group(['prefix' => config('payment.route_prefix', '')], function () {
+        VerifyCsrfToken::class,
+    ])->prefix(config('payment.route_prefix', '/api'))->group(function () {
         Route::get('/payment/instances', [PaymentController::class, 'index'])->name('payment.get');
         Route::patch('/payment/instances/{paymentInstance}/ack', [PaymentController::class, 'ack'])->name('payment.ack');
         Route::post('/payment/request', [PaymentController::class, 'initPayment'])->name('payment.init');
         Route::any('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
         Route::any('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
+        Route::post('/payment/cards', [CardController::class, 'create'])->name('card.create');
+        Route::get('/payment/cards', [CardController::class, 'index'])->name('card.list');
     });
 } else {
     $r = $this->app->router;
-    $r->group(['prefix' => config('payment.route_prefix', '')], function () use ($r) {
+    $r->group(['prefix' => config('payment.route_prefix', '/api')], function () use ($r) {
         $r->get(
             '/payment/instances', [
                 'as' => 'payment.get',
@@ -56,6 +65,18 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             '/payment/webhook', [
                 'as' => 'payment.webhook',
                 'uses' => 'Immera\Payment\Controllers\PaymentController@webhook',
+            ]
+        );
+        $r->post(
+            '/payment/cards', [
+                'as' => 'card.create',
+                'uses' => 'Immera\Payment\Controllers\CardController@create',
+            ]
+        );
+        $r->get(
+            '/payment/cards', [
+                'as' => 'card.list',
+                'uses' => 'Immera\Payment\Controllers\CardController@index',
             ]
         );
     });
