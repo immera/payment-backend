@@ -51,9 +51,9 @@ class PaymentController extends Controller
         );
 
         $pay_instance->refresh();
-        $pay_instance->intent_id = $response->id;
-        $pay_instance->client_secret = $response->client_secret;
-        $pay_instance->status = $response->status;
+        $pay_instance->setIntentIdFromObj($response, ['id']);
+        $pay_instance->setClientSecretFromObj($response);
+        $pay_instance->setStatusFromObj($response);
         $pay_instance->request_options = $request->all();
         $pay_instance->response_object = $response;
         $pay_instance->save();
@@ -68,20 +68,17 @@ class PaymentController extends Controller
 
     public function callback(Request $request)
     {
-        $pay_instance = PaymentInstance::where('intent_id', $request->payment_intent)->first();
+        $pay_instance = Payment::updateStatus(
+            PaymentInstance::getFromID($request->payment_intent),
+            $request->redirect_status
+        );
         if ($pay_instance) {
-            $pay_instance->status = $request->redirect_status;
-            $pay_instance->save();
-
+            if ($request->dont_redirect) {
+                return "Successfully updated to " . $request->redirect_status;
+            }
             return redirect($pay_instance->return_url);
         }
-        event(new PaymentInstanceUpdated($pay_instance));
-
         return 'Payment Instance not found !';
-    }
-
-    public function getCards(Request $request) {
-        return Payment::getCards();
     }
 
     public function webhook(Request $request)
