@@ -6,6 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class PaymentInstance extends Model
 {
+    protected $casts = [
+        'additional_info' => 'array'
+    ]; 
+    
     public static function getFromID($id)
     {
         return static::where('intent_id', $id)->first();
