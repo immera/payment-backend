@@ -3,12 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use Immera\Payment\Controllers\PaymentController;
 use Immera\Payment\Controllers\CardController;
+use Immera\Payment\Controllers\PaypalController;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Auth;
-
-Route::get('hello', function() {
-    return request()->except(['amount']);
-});
 
 if (app() instanceof \Illuminate\Foundation\Application) {
     Route::withoutMiddleware([
@@ -17,6 +14,7 @@ if (app() instanceof \Illuminate\Foundation\Application) {
         Route::get('/payment/instances', [PaymentController::class, 'index'])->name('payment.get');
         Route::patch('/payment/instances/{paymentInstance}/ack', [PaymentController::class, 'ack'])->name('payment.ack');
         Route::post('/payment/request', [PaymentController::class, 'initPayment'])->name('payment.init');
+        Route::post('/payment/paypal/order/{order}/capture', [PaypalController::class, 'captureOrder'])->name('payment.paypalOrderCapture');
         Route::any('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
         Route::any('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
         Route::post('/payment/cards', [CardController::class, 'create'])->name('card.create');
@@ -41,6 +39,12 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             '/payment/request', [
                 'as' => 'payment.init',
                 'uses' => 'Immera\Payment\Controllers\PaymentController@initPayment',
+            ]
+        );
+        $r->post(
+            '/payment/paypal/order/{order}/capture', [
+                'as' => 'payment.paypalOrderCapture',
+                'uses' => 'Immera\Payment\Controllers\PaypalController@captureOrder',
             ]
         );
         $r->get(

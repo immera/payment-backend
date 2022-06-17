@@ -6,6 +6,9 @@ use Stripe\StripeClient;
 use App\Models\Customer; #make sure we remove this one afterwards. / move to package
 use Illuminate\Support\Facades\Auth;
 use Immera\Payment\StripeCustomer;
+use Immera\Payment\Models\PaymentInstance;
+use Immera\Payment\Events\PaymentInstanceUpdated;
+use Illuminate\Support\Facades\Http;
 
 class Payment
 {
@@ -60,11 +63,16 @@ class Payment
         );
     }
 
+    public function paypal()
+    {
+        return new Paypal;
+    }
+
     public function pay($method, $currency, $amount, $options = [])
     {
         switch ($method) {
             case 'paypal':
-                return "whatever";
+                return (new Paypal)->createOrder($currency, $amount)->json();
                 break;
             case 'cash':
                 return (object) [
@@ -98,5 +106,16 @@ class Payment
             'currency' => $currency,
             'payment_method_types' => [$method],
         ]);
+    }
+
+    public static function updateStatus(PaymentInstance $pi, $status)
+    {
+        if ($pi)
+        {
+            $pi->status = $status;
+            $pi->save();
+            event(new PaymentInstanceUpdated($pi));
+        }
+        return $pi;
     }
 }
