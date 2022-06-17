@@ -18,6 +18,10 @@ Publish the vendor
 php artisan vendor:publish --provider=Immera\PaymentBackend\PaymentServiceProvider
 ```
 
+Run migrations
+```bash
+php artisan migrate
+```
 
 ## Usage
 
@@ -39,6 +43,9 @@ also make sure you have set your secret key in `.env` file
 
 ```
 STRIPE_SECRET=
+PAYPAL_URL=
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
 ```
 
 
