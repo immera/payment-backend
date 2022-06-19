@@ -17,6 +17,7 @@ if (app() instanceof \Illuminate\Foundation\Application) {
         Route::post('/payment/paypal/order/{order}/capture', [PaypalController::class, 'captureOrder'])->name('payment.paypalOrderCapture');
         Route::any('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
         Route::any('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
+        Route::delete('/payment/cards/{card}', [CardController::class, 'delete'])->name('card.delete');
         Route::post('/payment/cards', [CardController::class, 'create'])->name('card.create');
         Route::get('/payment/cards', [CardController::class, 'index'])->name('card.list');
     });
@@ -69,6 +70,12 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             '/payment/webhook', [
                 'as' => 'payment.webhook',
                 'uses' => 'Immera\Payment\Controllers\PaymentController@webhook',
+            ]
+        );
+        $r->delete(
+            '/payment/cards/{card}', [
+                'as' => 'card.delete',
+                'uses' => 'Immera\Payment\Controllers\CardController@delete',
             ]
         );
         $r->post(

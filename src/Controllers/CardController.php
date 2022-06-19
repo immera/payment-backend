@@ -37,4 +37,9 @@ class CardController extends Controller
         return $payment->createCard($card);
     }
 
+    public function delete(Request $request, $card)
+    {
+        $payment = new Payment;
+        return $payment->deleteCard($card);
+    }
 }

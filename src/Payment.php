@@ -51,6 +51,15 @@ class Payment
         );
     }
 
+    public function deleteCard($card)
+    {
+        return $this->stripe->customers->deleteSource(
+            $this->customer->getId(),
+            $card,
+            []
+        );
+    }
+
     public function getCards()
     {
         // stripe call with customer id to get cards and return them.
