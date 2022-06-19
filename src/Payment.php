@@ -75,7 +75,7 @@ class Payment
                 return (new Paypal)->createOrder($currency, $amount)->json();
                 break;
             case 'cash':
-                return (object) [
+                return [
                     'id' => 'cash',
                     'client_secret' => 'not_present',
                     'status' => 'pending',
