@@ -114,8 +114,19 @@ class Payment
         {
             $pi->status = $status;
             $pi->save();
-            event(new PaymentInstanceUpdated($pi));
+            // event(new PaymentInstanceUpdated($pi));
         }
         return $pi;
+    }
+
+    public static function handleWebhook($payload)
+    {
+        // try {
+        //     $event = \Stripe\Event::constructFrom($payload);
+        // } catch (\UnexpectedValueException $e) {
+        //     // Invalid payload
+        //     Log::info('UnexpectedValueException' . $e->getMessage());
+        //     return 400;
+        // }
     }
 }

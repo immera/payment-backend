@@ -58,7 +58,7 @@ class PaymentController extends Controller
         $pay_instance->response_object = $response;
         $pay_instance->save();
 
-        event(new PaymentInstanceCreated($pay_instance));
+        // event(new PaymentInstanceCreated($pay_instance));
 
         return [
             'callback' => route('payment.callback'),
@@ -83,6 +83,76 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
-        return 'Yet to implement !';
+        // $payload = json_decode(@file_get_contents('php://input'), true);
+        // $code = Payment::handleWebhook($payload, $_SERVER['HTTP_STRIPE_SIGNATURE']);
+        // http_response_code($code);
+
+        // #######################################################
+        // $endpoint_secret = config('service.stripe')['webhook_secret'];
+        // $payload = @file_get_contents('php://input');
+
+        
+        // $event = null;
+
+        // try {
+        //     $event = \Stripe\Event::constructFrom(
+        //         json_decode($payload, true)
+        //     );
+        // } catch (\UnexpectedValueException $e) {
+        //     // Invalid payload
+        //     Log::info('UnexpectedValueException' . $e->getMessage());
+        //     echo '⚠️  Webhook error while parsing basic request.';
+        //     http_response_code(400);
+        //     exit();
+        // }
+        // Only verify the event if there is an endpoint secret defined
+        // Otherwise use the basic decoded event
+        // $sig_header = ;
+        // try {
+        //     $event = \Stripe\Webhook::constructEvent(
+        //         $payload, $sig_header, $endpoint_secret
+        //     );
+        //     // Log::info('event-alipay' . $event);
+        // } catch (\Stripe\Exception\SignatureVerificationException $e) {
+        //     // Invalid signature
+        //     Log::info('SignatureVerificationException' . $e->getMessage());
+        //     echo '⚠️  Webhook error while validating signature.';
+        //     http_response_code(400);
+        //     exit();
+        // }
+
+        // // Handle the event
+        // switch ($event->type) {
+        //     case 'customer.created':
+        //         Log::info('customer.created' . $event->data);
+        //     case 'charge.succeeded':
+        //         $event->data->object;
+        //         $object = $event->data->object;
+        //         if(isset($object->metadata->order_id)) {
+        //             Order::where(['id' => $object->metadata->order_id])
+        //                 ->update([
+        //                     'payment_method' => $object->payment_method_details->type,
+        //                     'payment_status' => config('service.payment_status')['Success'],
+        //                     'transaction_id' => $object->id ?? '',
+        //                 ]);
+        //         } else {
+        //             $object = $event->data->object;
+        //             Log::info('object of subscription' . $object);
+        //             $subscriptionUser = SubscriptionUser::where('id', $object->metadata->subscription_user_id)->with('subscription')->first();
+        //             $updateData = [
+        //                 'payment_method' => $object->payment_method_details->type,
+        //                 'payment_status' => config('service.payment_status')['Success'],
+        //                 'transaction_id' => $object->id ?? '',
+        //             ];
+        //             $subscriptionUser->fill($updateData)->save();
+        //             Mail::to(Auth::user()->email)->locale(app()->getLocale())
+        //                 ->queue(new TrainingSubscription($subscriptionUser));
+        //         }
+
+        //         Log::info('charge.succeeded' . $event->data);
+        //     default:
+        //         echo 'Received unknown event type ' . $event->type;
+        // }
+        // http_response_code(200);
     }
 }
