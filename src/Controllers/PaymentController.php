@@ -9,6 +9,7 @@ use Immera\Payment\Events\PaymentInstanceCreated;
 use Immera\Payment\Events\PaymentInstanceUpdated;
 use Immera\Payment\Models\PaymentInstance;
 use Immera\Payment\Payment;
+use Log;
 
 class PaymentController extends Controller
 {
@@ -83,76 +84,66 @@ class PaymentController extends Controller
 
     public function webhook(Request $request)
     {
-        // $payload = json_decode(@file_get_contents('php://input'), true);
-        // $code = Payment::handleWebhook($payload, $_SERVER['HTTP_STRIPE_SIGNATURE']);
-        // http_response_code($code);
-
-        // #######################################################
-        // $endpoint_secret = config('service.stripe')['webhook_secret'];
-        // $payload = @file_get_contents('php://input');
-
+        Log::info("Recieved event on the webhook endpoint.");
+        $endpoint_secret = config('payment.stripe.webhook_secret');
+        $payload = $request->getContent();
+        $sig_header = $request->server('HTTP_STRIPE_SIGNATURE');
+        $event = null;
         
-        // $event = null;
+        try {   
+          $event = \Stripe\Webhook::constructEvent(
+            $payload, $sig_header, $endpoint_secret
+          );
+        } catch(\UnexpectedValueException $e) {
+          // Invalid payload
+          Log::error("Error while creting an event object [invalid payload]: " . $e->getMessage());
+          http_response_code(400);
+          exit();
+        } catch(\Stripe\Exception\SignatureVerificationException $e) {
+          // Invalid signature
+          Log::error("Error while creting an event object [invalid signature]: " . $e->getMessage());
+          http_response_code(400);
+          exit();
+        }
 
-        // try {
-        //     $event = \Stripe\Event::constructFrom(
-        //         json_decode($payload, true)
-        //     );
-        // } catch (\UnexpectedValueException $e) {
-        //     // Invalid payload
-        //     Log::info('UnexpectedValueException' . $e->getMessage());
-        //     echo '⚠️  Webhook error while parsing basic request.';
-        //     http_response_code(400);
-        //     exit();
-        // }
-        // Only verify the event if there is an endpoint secret defined
-        // Otherwise use the basic decoded event
-        // $sig_header = ;
-        // try {
-        //     $event = \Stripe\Webhook::constructEvent(
-        //         $payload, $sig_header, $endpoint_secret
-        //     );
-        //     // Log::info('event-alipay' . $event);
-        // } catch (\Stripe\Exception\SignatureVerificationException $e) {
-        //     // Invalid signature
-        //     Log::info('SignatureVerificationException' . $e->getMessage());
-        //     echo '⚠️  Webhook error while validating signature.';
-        //     http_response_code(400);
-        //     exit();
-        // }
-
-        // // Handle the event
-        // switch ($event->type) {
-        //     case 'customer.created':
-        //         Log::info('customer.created' . $event->data);
-        //     case 'charge.succeeded':
-        //         $event->data->object;
-        //         $object = $event->data->object;
-        //         if(isset($object->metadata->order_id)) {
-        //             Order::where(['id' => $object->metadata->order_id])
-        //                 ->update([
-        //                     'payment_method' => $object->payment_method_details->type,
-        //                     'payment_status' => config('service.payment_status')['Success'],
-        //                     'transaction_id' => $object->id ?? '',
-        //                 ]);
-        //         } else {
-        //             $object = $event->data->object;
-        //             Log::info('object of subscription' . $object);
-        //             $subscriptionUser = SubscriptionUser::where('id', $object->metadata->subscription_user_id)->with('subscription')->first();
-        //             $updateData = [
-        //                 'payment_method' => $object->payment_method_details->type,
-        //                 'payment_status' => config('service.payment_status')['Success'],
-        //                 'transaction_id' => $object->id ?? '',
-        //             ];
-        //             $subscriptionUser->fill($updateData)->save();
-        //             Mail::to(Auth::user()->email)->locale(app()->getLocale())
-        //                 ->queue(new TrainingSubscription($subscriptionUser));
-        //         }
-
-        //         Log::info('charge.succeeded' . $event->data);
-        //     default:
-        //         echo 'Received unknown event type ' . $event->type;
-        // }
-        // http_response_code(200);
+        $pay_object = $event->data->object;
+        switch($event->type)
+        {
+            case 'payment_intent.succeeded':
+            case 'source.chargeable':
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'SUCCESS'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid successfully.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+            case 'payment_intent.partially_funded':
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'PARTIAL'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+            case 'source.failed':
+            case 'source.canceled':	
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'FAILED'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+        }
     }
 }

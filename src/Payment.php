@@ -79,10 +79,33 @@ class Payment
 
     public function pay($method, $currency, $amount, $options = [])
     {
+        $intent_object = [
+            'amount' => $amount,
+            'currency' => $currency,
+            'payment_method_types' => [$method],
+        ];
+
         switch ($method) {
             case 'paypal':
                 return (new Paypal)->createOrder($currency, $amount)->json();
                 break;
+            case 'bank_transfer':
+                $intent_object['customer'] = $this->customer->getId();
+                $intent_object['payment_method_types'] = ['customer_balance'];
+                $intent_object['payment_method_data'] = ['type' => 'customer_balance'];
+                $intent_object['payment_method_options'] = [
+                  'customer_balance' => [
+                    'funding_type' => 'bank_transfer',
+                    'bank_transfer' => [
+                      'type' => 'eu_bank_transfer',
+                      'eu_bank_transfer' => [
+                        'country' => 'FR'
+                      ]
+                    ],
+                  ],
+                ];
+                break;
+        
             case 'cash':
                 return [
                     'id' => 'cash',
@@ -97,6 +120,7 @@ class Payment
                     'source' => $options['source'],
                     'customer' => $this->customer->getId(),
                 ]);
+                break;
             case 'multibanco':
                 return $this->stripe->sources->create([
                     'type' => 'multibanco',
@@ -109,12 +133,7 @@ class Payment
                 ]);
                 break;
         }
-
-        return $this->stripe->paymentIntents->create([
-            'amount' => $amount,
-            'currency' => $currency,
-            'payment_method_types' => [$method],
-        ]);
+        return $this->stripe->paymentIntents->create($intent_object);
     }
 
     public static function updateStatus(PaymentInstance $pi, $status)
