@@ -42,10 +42,12 @@ just add the following route in the `cors.php` config
 also make sure you have set your secret key in `.env` file
 
 ```
-STRIPE_SECRET=
-PAYPAL_URL=
+PAYMENT_ROUTE_PREFIX=/api
+PAYPAL_URL=https://api-m.sandbox.paypal.com/
 PAYPAL_CLIENT_ID=
 PAYPAL_CLIENT_SECRET=
+STRIPE_SECRET=
+STRIPE_WEBHOOK_SECRET=
 ```
 
 
