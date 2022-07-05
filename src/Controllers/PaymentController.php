@@ -146,4 +146,9 @@ class PaymentController extends Controller
                 break;
         }
     }
+
+    public function fundingInstructions()
+    {
+        return (new Payment)->fundingInstructions()
+    }
 }
