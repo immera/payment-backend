@@ -116,7 +116,7 @@ class PaymentController extends Controller
                     'SUCCESS'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid successfully.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid successfully.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
@@ -127,7 +127,7 @@ class PaymentController extends Controller
                     'PARTIAL'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
@@ -139,7 +139,7 @@ class PaymentController extends Controller
                     'FAILED'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
