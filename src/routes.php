@@ -20,6 +20,7 @@ if (app() instanceof \Illuminate\Foundation\Application) {
         Route::delete('/payment/cards/{card}', [CardController::class, 'delete'])->name('card.delete');
         Route::post('/payment/cards', [CardController::class, 'create'])->name('card.create');
         Route::get('/payment/cards', [CardController::class, 'index'])->name('card.list');
+        Route::get('/payment/funding-instructions', [PaymentController::class, 'fundingInstructions'])->name('funding.instructions');
     });
 } else {
     $r = $this->app->router;
@@ -88,6 +89,12 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             '/payment/cards', [
                 'as' => 'card.list',
                 'uses' => 'Immera\Payment\Controllers\CardController@index',
+            ]
+        );
+        $r->get(
+            '/payment/funding-instructions', [
+                'as' => 'funding.instructions',
+                'uses' => 'Immera\Payment\Controllers\PaymentController@fundingInstructions',
             ]
         );
     });

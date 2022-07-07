@@ -3,7 +3,8 @@
 return [
     'stripe' => [
         'secret_key' => env('STRIPE_SECRET'),
-        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET')
+        'webhook_secret' => env('STRIPE_WEBHOOK_SECRET'),
+        'country' => env('STRIPE_COUNTRY', 'FR'),
     ],
     'paypal' => [
         'url' => env('PAYPAL_URL', "https://api-m.sandbox.paypal.com/"),

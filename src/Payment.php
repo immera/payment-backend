@@ -147,6 +147,21 @@ class Payment
         return $pi;
     }
 
+    public function fundingInstructions()
+    {
+        return $this->stripe->customers->createFundingInstructions(
+            $this->customer->getId(),
+            [
+                'bank_transfer' => [
+                    'eu_bank_transfer' => ['country' => config('payment.stripe.country')],
+                    'type' => 'eu_bank_transfer',
+                ],
+                'currency' => 'eur',
+                'funding_type' => 'bank_transfer',
+            ]
+        );
+    }
+
     public static function handleWebhook($payload)
     {
         // try {
