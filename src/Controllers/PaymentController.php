@@ -149,6 +149,6 @@ class PaymentController extends Controller
 
     public function fundingInstructions()
     {
-        return (new Payment)->fundingInstructions()
+        return (new Payment)->fundingInstructions();
     }
 }
