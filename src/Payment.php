@@ -142,7 +142,7 @@ class Payment
         {
             $pi->status = $status;
             $pi->save();
-            // event(new PaymentInstanceUpdated($pi));
+            event(new PaymentInstanceUpdated($pi));
         }
         return $pi;
     }
