@@ -59,7 +59,7 @@ class PaymentController extends Controller
         $pay_instance->response_object = $response;
         $pay_instance->save();
 
-        // event(new PaymentInstanceCreated($pay_instance));
+        event(new PaymentInstanceCreated($pay_instance));
 
         return [
             'callback' => route('payment.callback'),

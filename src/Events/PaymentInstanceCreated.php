@@ -2,19 +2,14 @@
 
 namespace Immera\Payment\Events;
 
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Immera\Payment\Models\PaymentInstance;
 
-class PaymentInstanceCreated
+class PaymentInstanceCreated implements PaymentEventInterface
 {
-    use Dispatchable;
-    use InteractsWithSockets;
     use SerializesModels;
 
-    private $payment_instance;
+    public $payment_instance;
 
     /**
      * Create a new event instance.
@@ -26,13 +21,8 @@ class PaymentInstanceCreated
         $this->payment_instance = $pi;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
-    public function broadcastOn()
+    public function getPaymentInstace(): PaymentInstance
     {
-        return new PrivateChannel('channel-name');
+        return $this->payment_instance;
     }
 }
