@@ -56,7 +56,7 @@ class PaymentController extends Controller
         $pay_instance->setClientSecretFromObj($response);
         $pay_instance->setStatusFromObj($response);
         $pay_instance->request_options = $request->all();
-        $pay_instance->response_object = $response;
+        $pay_instance->response_object = $response->toArray();
         $pay_instance->save();
 
         event(new PaymentInstanceCreated($pay_instance));
