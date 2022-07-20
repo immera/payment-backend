@@ -16,15 +16,16 @@ class Payment
     protected $stripe;
     protected StripeCustomer $customer;
 
-    public function __construct(PaymentUserContract $user)
+    public function __construct(PaymentUserContract $user = NULL)
     {
         $stripe_key = config('payment.stripe.secret_key');
         $this->stripe = $stripe_key !== null ? new StripeClient($stripe_key) : null;
         $this->setCustomer($user);
     }
 
-    public function setCustomer(PaymentUserContract $user)
+    public function setCustomer(PaymentUserContract $user = NULL)
     {
+        if($user === NULL) $user = Auth::user();
         $cust = Customer::getCustomer($user->getId());
         if ($cust != null && $cust->stripe_customer_id != null) {
             $this->customer = new StripeCustomer($cust->stripe_customer_id, $user->getName(), $user->getEmail());
