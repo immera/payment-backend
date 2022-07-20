@@ -56,10 +56,10 @@ class PaymentController extends Controller
         $pay_instance->setClientSecretFromObj($response);
         $pay_instance->setStatusFromObj($response);
         $pay_instance->request_options = $request->all();
-        $pay_instance->response_object = $response;
+        $pay_instance->response_object = json_encode($response);
         $pay_instance->save();
 
-        // event(new PaymentInstanceCreated($pay_instance));
+        event(new PaymentInstanceCreated($pay_instance));
 
         return [
             'callback' => route('payment.callback'),
@@ -116,7 +116,7 @@ class PaymentController extends Controller
                     'SUCCESS'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid successfully.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid successfully.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
@@ -127,7 +127,7 @@ class PaymentController extends Controller
                     'PARTIAL'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
@@ -139,11 +139,16 @@ class PaymentController extends Controller
                     'FAILED'
                 );
                 if ($pay_instance) {
-                    Log::info("Payment instance with intent id ${$pay_object->id} has been paid partially.");
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
                 } else {
                     Log::info("Payment instance not found.");
                 }
                 break;
         }
+    }
+
+    public function fundingInstructions()
+    {
+        return (new Payment)->fundingInstructions();
     }
 }
