@@ -5,7 +5,6 @@ use Immera\Payment\Controllers\PaymentController;
 use Immera\Payment\Controllers\CardController;
 use Immera\Payment\Controllers\PaypalController;
 use App\Http\Middleware\VerifyCsrfToken;
-use Illuminate\Support\Facades\Auth;
 
 if (app() instanceof \Illuminate\Foundation\Application) {
     Route::withoutMiddleware([
@@ -21,6 +20,7 @@ if (app() instanceof \Illuminate\Foundation\Application) {
         Route::post('/payment/cards', [CardController::class, 'create'])->name('card.create');
         Route::get('/payment/cards', [CardController::class, 'index'])->name('card.list');
         Route::get('/payment/funding-instructions', [PaymentController::class, 'fundingInstructions'])->name('funding.instructions');
+        Route::get('/payment/enabled-methods/{slug?}', [PaymentController::class, 'enabledMethods'])->name('payment.methods');
     });
 } else {
     $r = $this->app->router;
@@ -95,6 +95,12 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             '/payment/funding-instructions', [
                 'as' => 'funding.instructions',
                 'uses' => 'Immera\Payment\Controllers\PaymentController@fundingInstructions',
+            ]
+        );
+        $r->get(
+            '/payment/enabled-methods[/{slug}]', [
+                'as' => 'payment.methods',
+                'uses' => 'Immera\Payment\Controllers\PaymentController@enabledMethods',
             ]
         );
     });

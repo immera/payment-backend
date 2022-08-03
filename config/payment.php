@@ -11,5 +11,8 @@ return [
         'client_id' => env('PAYPAL_CLIENT_ID'),
         'secret_key' => env('PAYPAL_CLIENT_SECRET'),
     ],
+    'payment_methods' => [
+        'default' => ['alipay', 'wechat_pay', 'multibanco', 'bank_transfer', 'card', 'paypal', 'cash']
+    ],
     'route_prefix' => env('PAYMENT_ROUTE_PREFIX', "/api"),
 ];
