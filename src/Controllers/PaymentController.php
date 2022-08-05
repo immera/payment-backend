@@ -5,6 +5,7 @@ namespace Immera\Payment\Controllers;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Immera\Payment\Events\PaymentInstanceCreated;
 use Immera\Payment\Events\PaymentInstanceUpdated;
 use Immera\Payment\Models\PaymentInstance;
@@ -13,6 +14,11 @@ use Log;
 
 class PaymentController extends Controller
 {
+    public function enabledMethods($slug = 'default') {
+        $methods = config('payment.payment_methods');
+        return Arr::get($methods, $slug, []);
+    }
+
     public function index(Request $request)
     {
         return PaymentInstance::where($request->all())->get();

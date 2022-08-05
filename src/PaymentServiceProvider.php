@@ -5,6 +5,8 @@ namespace Immera\Payment;
 use Illuminate\Support\ServiceProvider;
 use Immera\Payment\Models\PaymentInstance;
 use Immera\Payment\Observers\PaymentInstanceObserver;
+use Illuminate\Routing\Router;
+use Immera\Payment\Middlewares\ActivePaymentMethod;
 
 class PaymentServiceProvider extends ServiceProvider
 {
@@ -18,6 +20,17 @@ class PaymentServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
         $this->loadRoutesFrom(__DIR__.'/routes.php');
 
+
+        // Middleware
+        if (app() instanceof \Illuminate\Foundation\Application) {
+            $router = $this->app->make(Router::class);
+            $router->aliasMiddleware('active_payment_method', ActivePaymentMethod::class);
+        } else {
+            $this->app->routeMiddleware([
+                'active_payment_method' => ActivePaymentMethod::class,
+            ]);
+        }
+        
         // Observer
         PaymentInstance::observe(PaymentInstanceObserver::class);
 
