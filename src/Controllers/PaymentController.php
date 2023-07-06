@@ -65,7 +65,9 @@ class PaymentController extends Controller
         $pay_instance->response_object = json_encode($response);
         $pay_instance->save();
 
+        Log::info("About to raise and event 'PaymentInstanceCreated'.");
         event(new PaymentInstanceCreated($pay_instance));
+        Log::info("'PaymentInstanceCreated' event has been raised.");
 
         return [
             'callback' => route('payment.callback'),
