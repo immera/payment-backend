@@ -9,7 +9,10 @@ use App\Http\Middleware\VerifyCsrfToken;
 if (app() instanceof \Illuminate\Foundation\Application) {
     Route::withoutMiddleware([
         VerifyCsrfToken::class,
-    ])->prefix(config('payment.route_prefix', '/api'))->group(function () {
+    ])
+    ->prefix(config('payment.route_prefix', '/api'))
+    ->middleware(config('payment.middlewares', []))
+    ->group(function () {
         Route::get('/payment/instances', [PaymentController::class, 'index'])->name('payment.get');
         Route::patch('/payment/instances/{paymentInstance}/ack', [PaymentController::class, 'ack'])->name('payment.ack');
         Route::post('/payment/request', [PaymentController::class, 'initPayment'])->name('payment.init');
@@ -24,7 +27,10 @@ if (app() instanceof \Illuminate\Foundation\Application) {
     });
 } else {
     $r = $this->app->router;
-    $r->group(['prefix' => config('payment.route_prefix', '/api')], function () use ($r) {
+    $r->group([
+        'prefix' => config('payment.route_prefix', '/api'),
+        'middleware' => config('payment.middlewares', []),
+    ], function () use ($r) {
         $r->get(
             '/payment/instances', [
                 'as' => 'payment.get',
