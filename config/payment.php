@@ -15,4 +15,5 @@ return [
         'default' => ['alipay', 'wechat_pay', 'multibanco', 'bank_transfer', 'card', 'paypal', 'cash']
     ],
     'route_prefix' => env('PAYMENT_ROUTE_PREFIX', "/api"),
+    'middlewares' => [],
 ];
