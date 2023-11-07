@@ -12,7 +12,7 @@ So now you have package code inside your repo.
 
 now you need to link it to the local repo instead of downloading from packagist, so to achive that you need to make some changes in package.json
 
-you need to add the following code part in the `package.json` file.
+you need to add the following code part in the `composer.json` file.
 
 ```json
 {
