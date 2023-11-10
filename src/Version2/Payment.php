@@ -11,6 +11,7 @@ use Immera\Payment\Events\PaymentInstanceUpdated;
 use Illuminate\Support\Facades\Http;
 use Immera\Payment\Contracts\PaymentUserContract;
 
+
 class Payment
 {
     protected $stripe;
