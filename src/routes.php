@@ -5,23 +5,22 @@ use Immera\Payment\Controllers\PaymentController;
 use Immera\Payment\Controllers\CardController;
 use Immera\Payment\Controllers\PaypalController;
 use App\Http\Middleware\VerifyCsrfToken;
-use Immera\Payment\Controllers\Version2\PaymentVersion2Controller;
+use Immera\Payment\Controllers\V1\PaymentController as PaymentV1Controller;
 
 
 if (app() instanceof \Illuminate\Foundation\Application) {
     // This will be execute when Laravel Application is there
 
-    if(config('payment.active_version') === 'v2') {
+    if(config('payment.active_version') === 'v1') {
         // New code 
         Route::withoutMiddleware([
             VerifyCsrfToken::class,
         ])
-        ->prefix(config('payment.route_prefix', '/api') . '/v2')
+        ->prefix(config('payment.route_prefix', '/api') . '/v1')
         ->middleware(config('payment.middlewares', []))
         ->group(function () {
             Route::get('/payment/instances', [PaymentController::class, 'index'])->name('payment.get');
-            Route::patch('/payment/instances/{paymentInstance}/ack', [PaymentController::class, 'ack'])->name('payment.ack');
-            Route::post('/payment/request', [PaymentVersion2Controller::class, 'initPayment'])->name('payment.init');
+            Route::patch('/payment/instances/{paymentInstance}/ack', [PaymentController::class, 'ack'])->name('payment.ack');            
             Route::post('/payment/paypal/order/{order}/capture', [PaypalController::class, 'captureOrder'])->name('payment.paypalOrderCapture');
             Route::any('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
             Route::any('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
@@ -30,6 +29,9 @@ if (app() instanceof \Illuminate\Foundation\Application) {
             Route::get('/payment/cards', [CardController::class, 'index'])->name('card.list');
             Route::get('/payment/funding-instructions', [PaymentController::class, 'fundingInstructions'])->name('funding.instructions');
             Route::get('/payment/enabled-methods/{slug?}', [PaymentController::class, 'enabledMethods'])->name('payment.methods');
+
+            // New version api 
+            Route::post('/payment/request', [PaymentV1Controller::class, 'initPayment'])->name('payment.init');
         });
 
     } else {
@@ -55,10 +57,10 @@ if (app() instanceof \Illuminate\Foundation\Application) {
 } else {
     // This will be executed when Lumen Application is there
 
-    if(config('payment.active_version') === 'v2') {
+    if(config('payment.active_version') === 'v1') {
         $r = $this->app->router;
         $r->group([
-            'prefix' => config('payment.route_prefix', '/api/v2'),
+            'prefix' => config('payment.route_prefix', '/api/v1'),
             'middleware' => config('payment.middlewares', []),
         ], function () use ($r) {
             $r->get(
@@ -72,13 +74,7 @@ if (app() instanceof \Illuminate\Foundation\Application) {
                     'as' => 'payment.ack',
                     'uses' => 'Immera\Payment\Controllers\PaymentController@ack',
                 ]
-            );
-            $r->post(
-                '/payment/request', [
-                    'as' => 'payment.init',
-                    'uses' => 'Immera\Payment\Controllers\PaymentController@initPayment',
-                ]
-            );
+            );            
             $r->post(
                 '/payment/paypal/order/{order}/capture', [
                     'as' => 'payment.paypalOrderCapture',
@@ -137,6 +133,14 @@ if (app() instanceof \Illuminate\Foundation\Application) {
                 '/payment/enabled-methods[/{slug}]', [
                     'as' => 'payment.methods',
                     'uses' => 'Immera\Payment\Controllers\PaymentController@enabledMethods',
+                ]
+            );
+
+            // New version api
+            $r->post(
+                '/payment/request', [
+                    'as' => 'payment.init',
+                    'uses' => 'Immera\Payment\Controllers\PaymentV1Controller@initPayment',
                 ]
             );
         });

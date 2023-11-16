@@ -15,6 +15,6 @@ return [
         'default' => ['alipay', 'wechat_pay', 'multibanco', 'bank_transfer', 'card', 'paypal', 'cash']
     ],
     'route_prefix' => env('PAYMENT_ROUTE_PREFIX', "/api"),
-    'active_version' => 'v2', // you can use v1 to access older code.
+    'active_version' => 'v1', // you can use v0 to access older code.
     'middlewares' => [],
 ];
