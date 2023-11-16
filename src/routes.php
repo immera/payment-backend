@@ -5,7 +5,7 @@ use Immera\Payment\Controllers\PaymentController;
 use Immera\Payment\Controllers\CardController;
 use Immera\Payment\Controllers\PaypalController;
 use App\Http\Middleware\VerifyCsrfToken;
-use Immera\Payment\Controllers\V1\PaymentController as PaymentV1Controller;
+use Immera\Payment\V1\Controllers\PaymentController as PaymentV1Controller;
 
 
 if (app() instanceof \Illuminate\Foundation\Application) {
