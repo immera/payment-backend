@@ -9,8 +9,9 @@ use Immera\Payment\Events\PaymentInstanceCreated;
 use Immera\Payment\Models\PaymentInstance;
 use Immera\Payment\V1\Payment;
 use Log;
+use Immera\Payment\Controllers\PaymentController as PaymentControllerDefault;
 
-class PaymentController extends Controller
+class PaymentController extends PaymentControllerDefault
 {
     
     public function initPayment(Request $request)

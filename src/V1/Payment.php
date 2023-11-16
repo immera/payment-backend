@@ -54,4 +54,75 @@ class Payment
         ];        
         return $this->stripe->paymentIntents->create($intent_object);
     }
+
+    public function createCard(array $card)
+    {
+        $token = $this->stripe->tokens->create(['card' => $card]);
+        return $this->stripe->customers->createSource(
+            $this->customer->getId(),
+            ['source' => $token->id]
+        );
+    }
+
+    public function deleteCard($card)
+    {
+        return $this->stripe->customers->deleteSource(
+            $this->customer->getId(),
+            $card,
+            []
+        );
+    }
+
+    public function getCards()
+    {
+        // stripe call with customer id to get cards and return them.
+        return $this->stripe->customers->allSources(
+            $this->customer->getId(),
+            [
+                'object' => 'card',
+                'limit' => 10
+            ]
+        );
+    }
+
+    public function paypal()
+    {
+        return new Paypal;
+    }
+    public static function updateStatus(PaymentInstance $pi, $status)
+    {
+        if ($pi)
+        {
+            $pi->status = $status;
+            $pi->save();
+            event(new PaymentInstanceUpdated($pi));
+        }
+        return $pi;
+    }
+
+    public function fundingInstructions()
+    {
+        return $this->stripe->customers->createFundingInstructions(
+            $this->customer->getId(),
+            [
+                'bank_transfer' => [
+                    'eu_bank_transfer' => ['country' => config('payment.stripe.country')],
+                    'type' => 'eu_bank_transfer',
+                ],
+                'currency' => 'eur',
+                'funding_type' => 'bank_transfer',
+            ]
+        );
+    }
+
+    public static function handleWebhook($payload)
+    {
+        // try {
+        //     $event = \Stripe\Event::constructFrom($payload);
+        // } catch (\UnexpectedValueException $e) {
+        //     // Invalid payload
+        //     Log::info('UnexpectedValueException' . $e->getMessage());
+        //     return 400;
+        // }
+    }
 }
