@@ -1,6 +1,6 @@
 <?php
 
-namespace Immera\Payment\Controllers\V1;
+namespace Immera\Payment\V1\Controllers;
 
 use App\Http\Controllers\Controller;
 use Exception;
