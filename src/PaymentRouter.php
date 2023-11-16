@@ -6,7 +6,6 @@ use Immera\Payment\Controllers\PaymentController;
 use Immera\Payment\Controllers\CardController;
 use Immera\Payment\Controllers\PaypalController;
 use App\Http\Middleware\VerifyCsrfToken;
-use Immera\Payment\V1\PaymentRouter as PaymentRouterV1;
 
 class PaymentRouter {
     public static function laravel() {
