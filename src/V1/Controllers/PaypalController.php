@@ -9,16 +9,9 @@ use Immera\Payment\Events\PaymentInstanceCreated;
 use Immera\Payment\Events\PaymentInstanceUpdated;
 use Immera\Payment\Models\PaymentInstance;
 use Immera\Payment\Payment;
+use Immera\Payment\Controllers\PaypalController as PaypalControllerDefault;
 
-class PaypalController extends Controller
+class PaypalController extends PaypalControllerDefault
 {
-    public function captureOrder(Request $request, $order)
-    {
-        Payment::updateStatus(
-            PaymentInstance::getFromID($order),
-            "SUCCESS"
-        );
-        $payment = new Payment();
-        return $payment->paypal()->captureOrder($order)->json();
-    }
+    
 }
