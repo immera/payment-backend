@@ -12,7 +12,7 @@ class PaymentRouter {
         Route::withoutMiddleware([
             VerifyCsrfToken::class,
         ])
-        ->prefix(config('payment.route_prefix', '/api') . '/v1')
+        ->prefix(config('payment.route_prefix', '/api'))
         ->middleware(config('payment.middlewares', []))
         ->group(function () {
             Route::get('/payment/instances', [PaymentController::class, 'index'])->name('payment.get');
