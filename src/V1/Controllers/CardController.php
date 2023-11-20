@@ -13,7 +13,7 @@ class CardController extends CardControllerDefault
         if(isset($request->token)){
             // Token for creating card on stripe
             $card = [
-                'token' => $request->token['id']
+                'token' => $request->token
             ];
            
             // Creating payment object and card for that.
