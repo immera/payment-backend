@@ -64,6 +64,14 @@ class Payment
         );
     }
 
+    public function createCardByToken(array $card)
+    {
+        return $this->stripe->customers->createSource(
+            $this->customer->getId(),
+            ['source' => $card['token']]
+        );
+    }
+
     public function deleteCard($card)
     {
         return $this->stripe->customers->deleteSource(
