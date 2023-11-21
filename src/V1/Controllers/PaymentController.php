@@ -16,20 +16,21 @@ class PaymentController extends PaymentControllerDefault
     
     public function initPayment(Request $request)
     {
-        $pay_instance = new PaymentInstance();
-        $pay_instance->payment_method = $request->payment_method;
-        $pay_instance->return_url = $request->return_url;
-        $pay_instance->amount = $request->amount;
-        $pay_instance->currency = $request->currency;
-        $pay_instance->additional_info = $request->additional_info;
-        $pay_instance->save();
+        if(isset($request->payment_method)){
+            // Use old method as it is  
+            return parent::initPayment($request);
+        }else{
+            $pay_instance = new PaymentInstance();
+            $pay_instance->amount = $request->amount;
+            $pay_instance->currency = $request->currency;
+            $pay_instance->additional_info = $request->additional_info;
+            $pay_instance->save();
+        }
 
         $payment = new Payment();
-
-        $options = $request->except(['currency', 'amount', 'payment_method']);
+        $options = $request->except(['currency', 'amount']);
 
         $response = $payment->pay(
-            $request->payment_method,
             $request->currency,
             $request->amount
         );

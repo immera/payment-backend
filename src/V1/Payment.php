@@ -45,12 +45,12 @@ class Payment
     }
     
 
-    public function pay($method, $currency, $amount, $options = [])
+    public function pay($currency, $amount)
     {
         $intent_object = [
             'amount' => $amount,
             'currency' => $currency,
-            'payment_method_types' => [$method],
+            'automatic_payment_methods' => ['enabled' => true],
         ];        
         return $this->stripe->paymentIntents->create($intent_object);
     }
@@ -61,6 +61,14 @@ class Payment
         return $this->stripe->customers->createSource(
             $this->customer->getId(),
             ['source' => $token->id]
+        );
+    }
+
+    public function createCardByToken(array $card)
+    {
+        return $this->stripe->customers->createSource(
+            $this->customer->getId(),
+            ['source' => $card['token']]
         );
     }
 
