@@ -45,14 +45,33 @@ class Payment
     }
     
 
-    public function pay($currency, $amount)
+    public function pay($currency, $amount, $metadata)
     {
+        $ephemeralKey = $this->stripe->ephemeralKeys->create(
+            ['customer' => $this->customer->getId()],
+            ['stripe_version' => '2023-10-16']
+        );
+
+        
         $intent_object = [
             'amount' => $amount,
             'currency' => $currency,
             'automatic_payment_methods' => ['enabled' => true],
-        ];        
-        return $this->stripe->paymentIntents->create($intent_object);
+            'metadata' => $metadata,
+            'customer' => $this->customer->getId(),
+        ];       
+
+        $intent =  $this->stripe->paymentIntents->create($intent_object);
+
+        $output = [
+            'clientSecret' => $intent->client_secret,
+            'customerOptions' => [
+              'customer' => $this->customer->getId(),
+              'ephemeralKey' => $ephemeralKey->secret,
+            ],
+        ];
+        
+        return $output;
     }
 
     public function createCard(array $card)

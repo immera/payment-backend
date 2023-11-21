@@ -22,17 +22,17 @@ class PaymentController extends PaymentControllerDefault
         }else{
             $pay_instance = new PaymentInstance();
             $pay_instance->amount = $request->amount;
-            $pay_instance->currency = $request->currency;
-            $pay_instance->additional_info = $request->additional_info;
+            $pay_instance->currency = $request->currency;            
+            $pay_instance->additional_info = $request->metadata;
             $pay_instance->save();
         }
 
         $payment = new Payment();
-        $options = $request->except(['currency', 'amount']);
-
+        
         $response = $payment->pay(
             $request->currency,
-            $request->amount
+            $request->amount,
+            $request->metadata
         );
 
         $pay_instance->refresh();
