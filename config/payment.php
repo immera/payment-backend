@@ -16,5 +16,6 @@ return [
     ],
     'route_prefix' => env('PAYMENT_ROUTE_PREFIX', "/api"),
     'active_version' => 'v1', // you can use v0 to access older code.
+    'stripe_version_date' => env('STRIPE_VERSION_DATE', "2023-10-16"), // set stripe version date.
     'middlewares' => [],
 ];
