@@ -140,6 +140,7 @@ class PaymentController extends Controller
                     Log::info("Payment instance not found.");
                 }
                 break;
+            case 'payment_intent.payment_failed':
             case 'source.failed':
             case 'source.canceled':	
                 $pay_instance = Payment::updateStatus(
