@@ -117,7 +117,7 @@ class PaymentController extends Controller
         $pay_object = $event->data->object;
         switch($event->type)
         {
-            case 'payment_intent.succeeded':                    
+            case 'payment_intent.succeeded':
             case 'source.chargeable':
                 $pay_instance = Payment::updateStatus(
                     PaymentInstance::getFromID($request->payment_intent),
