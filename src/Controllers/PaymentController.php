@@ -118,6 +118,15 @@ class PaymentController extends Controller
         switch($event->type)
         {
             case 'payment_intent.succeeded':
+                    $pay_instance=$request->payment_intent;
+                    Log::info("About to raise and event 'PaymentInstanceUpdated'.");
+                    event(new PaymentInstanceUpdated($pay_instance));
+                    Log::info("'PaymentInstanceUpdated' event has been raised.");
+            case 'payment_intent.payment_failed':
+                    $pay_instance=$request->payment_intent;
+                    Log::info("About to raise and event 'PaymentInstanceUpdated'.");
+                    event(new PaymentInstanceUpdated($pay_instance));
+                    Log::info("'PaymentInstanceUpdated' event has been raised.");
             case 'source.chargeable':
                 $pay_instance = Payment::updateStatus(
                     PaymentInstance::getFromID($request->payment_intent),
