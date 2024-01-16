@@ -12,8 +12,7 @@ use Log;
 use Immera\Payment\Controllers\PaymentController as PaymentControllerDefault;
 
 class PaymentController extends PaymentControllerDefault
-{
-        
+{        
     public function initPayment(Request $request)
     {
         if(config('payment.active_version') == "v1" ){
