@@ -61,5 +61,65 @@ class PaymentController extends PaymentControllerDefault
             // Use old method as it is  
             return parent::initPayment($request);           
         }
-    }    
+    }  
+    
+    public function webhook(Request $request)
+    {
+        Log::info("Recieved event on the webhook endpoint.");
+        $endpoint_secret = config('payment.stripe.webhook_secret');
+        $payload = $request->getContent();
+        $sig_header = $request->server('HTTP_STRIPE_SIGNATURE');
+        $event = null;
+        
+        try {
+            $event = \Stripe\Event::constructFrom(
+              json_decode($payload, true)
+            );
+        } catch(\UnexpectedValueException $e) {
+            // Invalid payload
+            Log::error("Error while creting an event object [invalid payload]: " . $e->getMessage());
+            http_response_code(400);
+            exit();
+        }
+
+        $pay_object = $event->data->object;
+        switch($event->type)
+        {
+            case 'payment_intent.succeeded':
+            case 'source.chargeable':
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'SUCCESS'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid successfully.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+            case 'payment_intent.partially_funded':
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'PARTIAL'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+            case 'source.failed':
+            case 'source.canceled':	
+                $pay_instance = Payment::updateStatus(
+                    PaymentInstance::getFromID($request->payment_intent),
+                    'FAILED'
+                );
+                if ($pay_instance) {
+                    Log::info("Payment instance with intent id " . $pay_object->id . " has been paid partially.");
+                } else {
+                    Log::info("Payment instance not found.");
+                }
+                break;
+        }
+    }
 }
