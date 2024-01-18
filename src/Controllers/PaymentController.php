@@ -90,9 +90,7 @@ class PaymentController extends Controller
         return 'Payment Instance not found !';
     }
 
-    public function webhook(Request $request)
-    {
-        Log::info("Recieved event on the webhook endpoint.");
+    protected function getStripeEvent(Request $request) {
         $endpoint_secret = config('payment.stripe.webhook_secret');
         $payload = $request->getContent();
         $sig_header = $request->server('HTTP_STRIPE_SIGNATURE');
@@ -113,6 +111,13 @@ class PaymentController extends Controller
           http_response_code(400);
           exit();
         }
+        return $event;
+    }
+
+    public function webhook(Request $request)
+    {
+        Log::info("Recieved event on the webhook endpoint.");
+        $event = $this->getStripeEvent($request);
 
         $pay_object = $event->data->object;
         switch($event->type)
