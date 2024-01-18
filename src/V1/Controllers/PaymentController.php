@@ -63,7 +63,7 @@ class PaymentController extends PaymentControllerDefault
         }
     }  
     
-    protected function getStripeEvent($request) {
+    protected function getStripeEvent(Request $request) {
         $endpoint_secret = config('payment.stripe.webhook_secret');
         $payload = $request->getContent();
         
