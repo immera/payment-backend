@@ -90,7 +90,7 @@ class PaymentController extends Controller
         return 'Payment Instance not found !';
     }
 
-    protected function getStripeEvent($request) {
+    protected function getStripeEvent(Request $request) {
         $endpoint_secret = config('payment.stripe.webhook_secret');
         $payload = $request->getContent();
         $sig_header = $request->server('HTTP_STRIPE_SIGNATURE');
